@@ -32,7 +32,10 @@ class _MoneyManagemantState extends State<MoneyManagemant> with SingleTickerProv
                     ),
                     padding: EdgeInsets.symmetric(vertical: 15),
                   ),
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.pop(context);
+                    _showFrom(isIncome: true);
+                  },
                   child: Text(
                     "Add Money",
                     style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold,
@@ -50,7 +53,10 @@ class _MoneyManagemantState extends State<MoneyManagemant> with SingleTickerProv
                     ),
                     padding: EdgeInsets.symmetric(vertical: 15),
                   ),
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.pop(context);
+                    _showFrom(isIncome: false);
+                  },
                   child: Text(
                     "Add Expense",
                     style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold,
@@ -64,6 +70,116 @@ class _MoneyManagemantState extends State<MoneyManagemant> with SingleTickerProv
       );
     });
 
+  }
+  void _showFrom({required bool isIncome}){
+    TextEditingController titleController = TextEditingController();
+    TextEditingController amountController = TextEditingController();
+    DateTime enterDate = DateTime.now();
+    showModalBottomSheet(context: context, builder: (context){
+      return Column(
+        children: [
+          SizedBox(height: 20,),
+          Text(
+            isIncome ? "Add Income" : "Add Earning",style: TextStyle(
+            fontWeight: FontWeight.w900,
+            fontSize: 20,
+          ),
+          ),
+          SizedBox(height: 20,),
+          Padding(
+            padding: const EdgeInsets.all(10.0),
+            child: Container(
+              child: Column(
+                children: [
+                  TextField(
+                    controller: titleController,
+                    decoration: InputDecoration(
+                        hintText: "Enter Title",
+                        labelText: "Title",
+                        labelStyle: TextStyle(
+                          color: Colors.grey,
+                        ),
+                        floatingLabelStyle: TextStyle(
+                          color: Color(0xff8D1FE1),
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10),
+                          borderSide: BorderSide(color: Colors.grey),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                            borderSide: BorderSide(
+                                color: Color(0xff8D1FE1)
+                            )
+                        ),
+
+                        border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                            borderSide: BorderSide(
+                              color: Colors.grey,
+                            )
+                        )
+                    ),
+                  ),
+                  SizedBox(height: 10,),
+                  TextField(
+                    controller: amountController,
+                    keyboardType: TextInputType.number,
+                    decoration: InputDecoration(
+                        hintText: "Enter Amount",
+                        labelText: "Amount",
+                        labelStyle: TextStyle(
+                          color: Colors.grey,
+                        ),
+                        floatingLabelStyle: TextStyle(
+                          color: Color(0xff8D1FE1),
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10),
+                          borderSide: BorderSide(color: Colors.grey),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                            borderSide: BorderSide(
+                                color: Color(0xff8D1FE1)
+                            )
+                        ),
+
+                        border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                            borderSide: BorderSide(
+                              color: Colors.grey,
+                            )
+                        )
+                    ),
+                  ),
+                  SizedBox(height: 20,),
+                  ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: isIncome ? Colors.green : Colors.red,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+
+                        ),
+                        padding: EdgeInsets.symmetric(vertical: 15,horizontal: 20),
+                      ),
+                      onPressed: (){}, child: Text(isIncome ? "Add Income" : "Add Expense",style: TextStyle(
+                    fontWeight: FontWeight.w900,
+                    fontSize: 15,
+                    color: Colors.white
+                  ),)),
+                ],
+              ),
+            ),
+          ),
+
+
+
+        ],
+
+
+      );
+    });
   }
   @override
   Widget build(BuildContext context) {
