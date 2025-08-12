@@ -6,7 +6,65 @@ class MoneyManagemant extends StatefulWidget {
   State<MoneyManagemant> createState() => _MoneyManagemantState();
 }
 
-class _MoneyManagemantState extends State<MoneyManagemant> {
+class _MoneyManagemantState extends State<MoneyManagemant> with SingleTickerProviderStateMixin{
+ late TabController _tabController;
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _tabController = TabController(length: 2, vsync: this);
+  }
+  void _showFABOptions(BuildContext context){
+    showModalBottomSheet(context: context, builder: (context){
+      return Container(
+        padding: EdgeInsets.symmetric(horizontal: 20, vertical: 30),
+        height: 120,
+        width: double.infinity,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+              Expanded(
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.green,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    padding: EdgeInsets.symmetric(vertical: 15),
+                  ),
+                  onPressed: () {},
+                  child: Text(
+                    "Add Money",
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold,
+                    color: Colors.white),
+                  ),
+                ),
+              ),
+              SizedBox(width: 20),
+              Expanded(
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.red,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    padding: EdgeInsets.symmetric(vertical: 15),
+                  ),
+                  onPressed: () {},
+                  child: Text(
+                    "Add Expense",
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold,
+                    color: Colors.white),
+                  ),
+                ),
+              ),
+          ],
+
+        ),
+      );
+    });
+
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -18,7 +76,7 @@ class _MoneyManagemantState extends State<MoneyManagemant> {
               Stack(
                 children: [
                   Container(
-                  height: 340,
+                  height: 320,
                   width: double.infinity,
                   decoration: BoxDecoration(
                     color: Colors.white,
@@ -180,8 +238,30 @@ class _MoneyManagemantState extends State<MoneyManagemant> {
                 ],
               )
             ],
-          )
+          ),
+          TabBar(
+            controller: _tabController,
+              unselectedLabelColor: Colors.grey[400],
+              indicatorColor:  Color(0xff8D1FE1),
+
+
+              labelStyle: TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
+              tabs:[
+            Tab(text: "Income",
+              icon: Icon(Icons.arrow_drop_up, size: 18),
+              iconMargin: EdgeInsets.only(bottom: 2),
+            ),
+            Tab(text: "Expense",
+              icon: Icon(Icons.arrow_drop_down, size: 18),
+              iconMargin: EdgeInsets.only(bottom: 2),
+            ),
+          ]),
         ],
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: ()=>_showFABOptions(context),
+        backgroundColor: Color(0xff8D1FE1),
+        child: Icon(Icons.add,size: 30,color: Colors.white,),
       ),
 
     );
