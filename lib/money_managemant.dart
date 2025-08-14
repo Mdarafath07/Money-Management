@@ -8,6 +8,31 @@ class MoneyManagemant extends StatefulWidget {
 
 class _MoneyManagemantState extends State<MoneyManagemant> with SingleTickerProviderStateMixin{
  late TabController _tabController;
+
+ List<Map<String,dynamic>> _income = [];
+ List<Map<String,dynamic>> _expense = [];
+ double get totalIncome => _income.fold(0,(sum, item)=> sum+item["amount"]);
+ double get totalExpense => _expense.fold(0,(sum, item)=> sum+item["amount"]);
+ double get totalBalance => totalIncome - totalExpense;
+ void _addEntry(String title, double amount, DateTime date, bool isIncome){
+   setState(() {
+     if(isIncome){
+       _income.add(
+         {
+           "title": title,
+           "amount": amount,
+           "date": date,
+         }
+       );
+     }else{
+       _expense.add({
+         "title": title,
+         "amount": amount,
+         "date": date,
+       });
+     }
+   });
+ }
   @override
   void initState() {
     // TODO: implement initState
@@ -163,7 +188,13 @@ class _MoneyManagemantState extends State<MoneyManagemant> with SingleTickerProv
                         ),
                         padding: EdgeInsets.symmetric(vertical: 15,horizontal: 20),
                       ),
-                      onPressed: (){}, child: Text(isIncome ? "Add Income" : "Add Expense",style: TextStyle(
+                      onPressed: (){
+                        if(titleController.text.isNotEmpty || amountController.text.isNotEmpty){
+                          _addEntry(titleController.text, double.parse(amountController.text), enterDate, isIncome);
+                          Navigator.pop(context);
+
+                        }
+                      }, child: Text(isIncome ? "Add Income" : "Add Expense",style: TextStyle(
                     fontWeight: FontWeight.w900,
                     fontSize: 15,
                     color: Colors.white
@@ -284,7 +315,7 @@ class _MoneyManagemantState extends State<MoneyManagemant> with SingleTickerProv
                                     fontSize: 14,
                                     fontWeight: FontWeight.w900,
                                   ),),
-                                  Text("500 TK",style: TextStyle(
+                                  Text(totalBalance.toString(),style: TextStyle(
                                     color: Colors.black,
                                     fontSize: 17,
                                     fontWeight: FontWeight.w900,
@@ -315,7 +346,7 @@ class _MoneyManagemantState extends State<MoneyManagemant> with SingleTickerProv
                                           fontSize: 15,
                                           fontWeight: FontWeight.w500,
                                         ),),
-                                        Text("500 TK",style: TextStyle(
+                                        Text(totalIncome.toString(),style: TextStyle(
                                           color: Colors.green,
                                           fontSize: 17,
                                           fontWeight: FontWeight.w900,
@@ -332,7 +363,7 @@ class _MoneyManagemantState extends State<MoneyManagemant> with SingleTickerProv
                                           fontSize: 15,
                                           fontWeight: FontWeight.w500,
                                         ),),
-                                        Text("500 TK",style: TextStyle(
+                                        Text(totalExpense.toString(),style: TextStyle(
                                           color: Colors.red,
                                           fontSize: 17,
                                           fontWeight: FontWeight.w900,
@@ -372,6 +403,16 @@ class _MoneyManagemantState extends State<MoneyManagemant> with SingleTickerProv
               iconMargin: EdgeInsets.only(bottom: 2),
             ),
           ]),
+          Expanded(
+            child: TabBarView(
+              controller: _tabController,
+              children: [
+                _buildList(_income, Colors.green, true),
+                _buildList(_expense, Colors.red, false),
+              ],
+            )
+
+          )
         ],
       ),
       floatingActionButton: FloatingActionButton(
@@ -382,4 +423,97 @@ class _MoneyManagemantState extends State<MoneyManagemant> with SingleTickerProv
 
     );
   }
+}
+Widget _buildList(List<Map<String,dynamic>>item, Color color,bool isIncome){
+  return ListView.builder(
+    itemCount: item.length,
+    itemBuilder: (context,index){
+      return Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: Container(
+                  height: 100,
+                  width: double.infinity,
+                  decoration: BoxDecoration(
+                    color: Colors.grey.withOpacity(0.1),
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  child:Row(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(15.0),
+                        child: Container(
+                          height: double.infinity,
+                          width: 10,
+                          decoration: BoxDecoration(
+                              color: Colors.green,
+                              borderRadius: BorderRadius.circular(10)
+                          ),
+                        ),
+                      ),
+                      SizedBox(width: 5,),
+                      CircleAvatar(
+                        radius: 26,
+                        backgroundColor: Colors.green.withOpacity(0.2),
+                        child: Icon(isIncome ? Icons.arrow_upward_outlined : Icons.arrow_downward),
+                      ),
+                      SizedBox(width: 10,),
+                      Expanded(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Container(
+                              height: double.infinity,
+                              alignment: Alignment.center,
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text("৳${item[index]["amount"]}",style: TextStyle(
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.w900,
+                                    color: color,
+
+                                  ),),
+                                  SizedBox(height: 10,),
+                                  Text(item[index]["title"],style: TextStyle(
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.w900,
+                                      color: Colors.grey
+
+                                  ),)
+                                ],
+                              ),
+                            ),
+                            Container(
+                              child:Padding(
+                                padding: const EdgeInsets.symmetric(vertical: 10,horizontal: 10),
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(item[index]["date"].toString(),style: TextStyle(
+                                        fontSize: 10,
+                                        fontWeight: FontWeight.w900,
+                                        color: Colors.grey
+
+                                    ),),
+                                    SizedBox(),
+                                  ],
+                                ),
+                              ),
+
+                            ),
+
+                          ],
+                        ),
+                      ),
+
+                    ],
+                  )
+              ),
+            )
+          ],
+        );
+    });
 }
