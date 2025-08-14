@@ -270,9 +270,7 @@ class _MoneyManagemantState extends State<MoneyManagemant> with SingleTickerProv
                                 color: Colors.white,
                                 fontWeight: FontWeight.w900,
                                 fontSize: 20,
-
                               ),),
-
                             ],
                           ),
                           Icon(Icons.notifications_outlined,size: 30,color: Colors.white,)
@@ -447,7 +445,7 @@ Widget _buildList(List<Map<String,dynamic>>item, Color color,bool isIncome){
                           height: double.infinity,
                           width: 10,
                           decoration: BoxDecoration(
-                              color: Colors.green,
+                              color: isIncome? Colors.green : Colors.red,
                               borderRadius: BorderRadius.circular(10)
                           ),
                         ),
@@ -455,7 +453,7 @@ Widget _buildList(List<Map<String,dynamic>>item, Color color,bool isIncome){
                       SizedBox(width: 5,),
                       CircleAvatar(
                         radius: 26,
-                        backgroundColor: Colors.green.withOpacity(0.2),
+                        backgroundColor: isIncome ? Colors.green : Colors.red.withOpacity(0.2),
                         child: Icon(isIncome ? Icons.arrow_upward_outlined : Icons.arrow_downward),
                       ),
                       SizedBox(width: 10,),
@@ -478,7 +476,7 @@ Widget _buildList(List<Map<String,dynamic>>item, Color color,bool isIncome){
                                   ),),
                                   SizedBox(height: 10,),
                                   Text(item[index]["title"],style: TextStyle(
-                                      fontSize: 15,
+                                      fontSize: 18,
                                       fontWeight: FontWeight.w900,
                                       color: Colors.grey
 
